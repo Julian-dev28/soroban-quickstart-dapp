@@ -8,7 +8,7 @@ SOROBAN_RPC_HOST="$2"
 
 PATH=./target/bin:$PATH
 
-if [[ -f "./.soroban-example-dapp/hello_world_id" ]]; then
+if [[ -f "./.soroban-example-dapp" ]]; then
   echo "Removing previous deployments"
 
   rm -rf ./.soroban-example-dapp
