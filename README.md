@@ -17,7 +17,7 @@ backed by smart contracts on Stellar.
 6. If you want to skip step (1) and (2) and avoid installing specific `rustc` or `soroban-cli` versions, build the `soroban-preview` docker image:
 
 ```
-   make build-docker
+make build-docker
 ```
 
 7. **NOTE** - Follow the instructions below for Futurenet or Standalone and ensure that you have funded your wallet address that you intend to use from browser, otherwise the dapp display will be blank and a 'Account not found' will be printed on browser's console only.
