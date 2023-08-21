@@ -40,7 +40,7 @@ You have three options: 1. Deploy on [Futurenet](https://soroban.stellar.org/doc
 
         npm run setup
 
-    This runs `./initialize.sh futurenet` behind the scenes, which will create a `example-user` identity for you (`soroban config identity create example-user`) and deploy the [modified hello world contract](./contracts/hello-world), with this account as admin.
+    This runs `./initialize.sh futurenet` behind the scenes, which will create a `example-user` identity for you (`soroban config identity create example-user`) and deploy the [modified hello world contract](./contracts/hello-world), with this account as the deployer.
 
 2.  Select the Futurenet network in your Freighter browser extension
 
