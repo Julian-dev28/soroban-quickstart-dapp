@@ -1,8 +1,6 @@
 #![no_std]
 use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
 
-pub struct State;
-
 const COUNT: Symbol = symbol_short!("COUNT");
 const LAST_INCR: Symbol = symbol_short!("LAST_INCR");
 const MESSAGE: Symbol = symbol_short!("MESSAGE");
