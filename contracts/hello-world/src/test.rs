@@ -13,7 +13,6 @@ fn test() {
 
     assert_eq!(client.increment(&1), 1);
     assert_eq!(client.increment(&10), 11);
-
     assert_eq!(client.get_count(), 11);
     assert_eq!(client.get_last_increment(), 10);
     assert_eq!(

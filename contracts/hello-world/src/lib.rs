@@ -1,13 +1,15 @@
 #![no_std]
 use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
 
+const MESSAGE: Symbol = symbol_short!("MESSAGE");
 const COUNT: Symbol = symbol_short!("COUNT");
 const LAST_INCR: Symbol = symbol_short!("LAST_INCR");
-const MESSAGE: Symbol = symbol_short!("MESSAGE");
 
+// (attribute macro) Marks a type as being the type that contract functions are attached for.
 #[contract]
 pub struct HelloContract;
 
+// (attribute macro) Exports the publicly accessible functions to the Soroban environment.
 #[contractimpl]
 impl HelloContract {
     pub fn hello(env: Env, to: Symbol) -> Vec<Symbol> {
