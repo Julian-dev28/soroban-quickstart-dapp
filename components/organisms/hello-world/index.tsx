@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "../../atoms";
 import * as helloWorldContract from "hello-world-contract";
 import { useAccount } from "../../../hooks";
