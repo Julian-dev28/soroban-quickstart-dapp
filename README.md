@@ -16,7 +16,9 @@ backed by smart contracts on Stellar.
 5. [Freighter Wallet](https://www.freighter.app/) ≥[v5.0.2](https://github.com/stellar/freighter/releases/tag/2.9.1). Or from the Firefox / Chrome extension store. Once installed, enable "Experimental Mode" in the settings (gear icon).
 6. If you want to skip step (1) and (2) and avoid installing specific `rustc` or `soroban-cli` versions, build the `soroban-preview` docker image:
 
+```
    make build-docker
+```
 
 7. **NOTE** - Follow the instructions below for Futurenet or Standalone and ensure that you have funded your wallet address that you intend to use from browser, otherwise the dapp display will be blank and a 'Account not found' will be printed on browser's console only.
 
