@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "../../atoms";
 import * as helloWorldContract from "hello-world-contract";
-import { useAccount } from "../../../hooks";
 // import styles from "./style.module.css";
 
 const HelloWorld = () => {
@@ -10,16 +9,6 @@ const HelloWorld = () => {
   const [incr, setIncr] = useState("");
   const [newIncrement, setNewIncrement] = useState("");
   const [message, setMessage] = useState([""]);
-
-  const [contractAddress, setContractAddress] = useState("");
-
-  const account = useAccount();
-
-  useEffect(() => {
-    if (account) {
-      setContractAddress(account.address);
-    }
-  }, [account]);
 
   const handleHello = async () => {
     try {
