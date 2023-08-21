@@ -9,8 +9,10 @@ SOROBAN_RPC_HOST="$2"
 PATH=./target/bin:$PATH
 
 if [[ -f "./.soroban-example-dapp/hello_world_id" ]]; then
-  echo "Found existing './.soroban-example-dapp' directory; already initialized."
-  exit 0
+  echo "Removing previous deployments"
+
+  rm -rf ./.soroban-example-dapp
+  rm -rf ./.soroban
 fi
 
 if [[ "$SOROBAN_RPC_HOST" == "" ]]; then
