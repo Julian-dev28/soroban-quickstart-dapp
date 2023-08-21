@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "../../atoms";
 import * as helloWorldContract from "hello-world-contract";
+
 // import styles from "./style.module.css";
 
 const HelloWorld = () => {
