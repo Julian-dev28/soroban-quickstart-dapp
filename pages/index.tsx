@@ -21,7 +21,7 @@ const Home: NextPage = () => {
       </Head>
 
       <header className={styles.header}>
-        <h3>Soroban Greet & Count</h3>
+        <h3>Soroban Quickstart</h3>
         <WalletData />
       </header>
       <main className={styles.main}>

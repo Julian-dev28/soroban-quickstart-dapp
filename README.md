@@ -1,4 +1,4 @@
-# Soroban Quickstart Dapp Example
+# Soroban Quickstart Dapp
 
 ![Screenshot of the Example Dapp](screenshot.png)
 

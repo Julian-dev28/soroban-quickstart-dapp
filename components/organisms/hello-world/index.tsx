@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState, useEffect } from "react";
 import { Card } from "../../atoms";
 import * as helloWorldContract from "hello-world-contract";
 import { useAccount } from "../../../hooks";
-import styles from "./style.module.css";
+// import styles from "./style.module.css";
 
 const HelloWorld = () => {
   const [to, setTo] = useState("");
@@ -100,7 +100,7 @@ const HelloWorld = () => {
           <div>
             <strong>Message:</strong>
             <br />
-            <pre>{` ${message}`}</pre>
+            <pre>{`${message}`}</pre>
           </div>
           <br />
           {/* Next section here */}
