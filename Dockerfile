@@ -1,4 +1,4 @@
-# Based on Preview 7
+# Based on Preview 10
 # https://soroban.stellar.org/docs/reference/releases
 
 FROM ubuntu:20.04
