@@ -71,7 +71,7 @@ const HelloWorld = () => {
   return (
     <div>
       <Card>
-        <h1>Soroban Contract Interaction</h1>
+        <h2>Smart Contract Interaction</h2>
         <div>
           <label>Recipient:</label>
           <input

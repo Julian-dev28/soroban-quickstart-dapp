@@ -8,20 +8,8 @@ import { WalletData } from "../components/molecules";
 const Home: NextPage = () => {
   return (
     <>
-      <Head>
-        <title>
-          Crowdfund Template - An example of how to run a crowdfund campaign on
-          Soroban.
-        </title>
-        <meta
-          name="description"
-          content="An example of loading information from a soroban smart contract"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <header className={styles.header}>
-        <h3>Soroban Quickstart</h3>
+        <h3>Soroban Quickstart Dapp</h3>
         <WalletData />
       </header>
       <main className={styles.main}>
