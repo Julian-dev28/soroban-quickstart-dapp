@@ -6,7 +6,7 @@ NETWORK="$1"
 
 SOROBAN_RPC_HOST="$2"
 
-PATH=./target/bin:$PATH
+# PATH=./target/bin:$PATH
 
 if [[ -f "./.soroban-example-dapp" ]]; then
   echo "Removing previous deployments"
@@ -78,7 +78,7 @@ ARGS="--network $NETWORK --source example-user"
 echo Build contracts
 make build
 
-echo Deploy the crowdfund contract
+echo Deploy the hello world contract
 HELLO_WORLD_ID="$(
   soroban contract deploy $ARGS \
     --wasm target/wasm32-unknown-unknown/release/soroban_modified_hello_world_contract.wasm
