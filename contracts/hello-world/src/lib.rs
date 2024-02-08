@@ -1,6 +1,10 @@
 #![no_std]
 use soroban_sdk::{contract, contractimpl, symbol_short, vec, Env, Symbol, Vec};
 
+pub(crate) const DAY_IN_LEDGERS: u32 = 17280;
+pub(crate) const INSTANCE_BUMP_AMOUNT: u32 = 7 * DAY_IN_LEDGERS;
+pub(crate) const INSTANCE_LIFETIME_THRESHOLD: u32 = INSTANCE_BUMP_AMOUNT - DAY_IN_LEDGERS;
+
 const MESSAGE: Symbol = symbol_short!("MESSAGE");
 const COUNT: Symbol = symbol_short!("COUNT");
 const LAST_INCR: Symbol = symbol_short!("LAST_INCR");
@@ -23,6 +27,10 @@ impl HelloContract {
         env.events()
             .publish((MESSAGE, symbol_short!("hello")), message.clone());
 
+        env.storage()
+            .instance()
+            .extend_ttl(INSTANCE_BUMP_AMOUNT, INSTANCE_BUMP_AMOUNT);
+
         // Return the message to the caller.
         message
     }
@@ -42,6 +50,9 @@ impl HelloContract {
         // Save the count.
         env.storage().instance().set(&COUNT, &count);
         env.storage().instance().set(&LAST_INCR, &incr);
+        env.storage()
+            .instance()
+            .extend_ttl(INSTANCE_BUMP_AMOUNT, INSTANCE_BUMP_AMOUNT);
 
         // Emit an event.
         env.events()

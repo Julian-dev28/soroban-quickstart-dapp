@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "../../atoms";
 import { helloWorld } from '../../../shared/contracts'
-
-// import styles from "./style.module.css";
+import styles from "./style.module.css";
 
 const HelloWorld = () => {
   const [to, setTo] = useState("");
@@ -10,6 +9,8 @@ const HelloWorld = () => {
   const [incr, setIncr] = useState("");
   const [newIncrement, setNewIncrement] = useState("");
   const [message, setMessage] = useState([""]);
+  const [incrementSuccess, setIncrementSuccess] = useState(false); // New state for tracking increment success
+
 
   const handleHello = async () => {
     try {
@@ -26,8 +27,10 @@ const HelloWorld = () => {
       const incrementTx = await helloWorld.increment({ incr: Number(incr) }, { fee: 100 });
       await incrementTx.signAndSend();
       console.log(`incremented by ${incr}`);
+      setIncrementSuccess(true); // Set success state to true on successful increment
     } catch (error) {
       console.error("Error calling increment:", error);
+      setIncrementSuccess(false); // Set success state to false on error
     }
   };
 
@@ -71,7 +74,7 @@ const HelloWorld = () => {
             value={to}
             onChange={(e) => setTo(e.target.value)}
           />
-          <button onClick={handleHello}>Write Message</button>
+          <button onClick={handleHello} >Write Message</button>
         </div>
         <br />
         <div>
