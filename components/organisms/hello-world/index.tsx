@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "../../atoms";
-import * as helloWorldContract from "hello-world-contract";
+import { helloWorld } from '../../../shared/contracts'
 
 // import styles from "./style.module.css";
 
@@ -13,7 +13,8 @@ const HelloWorld = () => {
 
   const handleHello = async () => {
     try {
-      await helloWorldContract.hello({ to }, { fee: 100 });
+      const helloTx = (await helloWorld.hello({ to }, { fee: 100 }));
+      await helloTx.signAndSend();
       console.log(`hello, ${to}`);
     } catch (error) {
       console.error("Error calling hello:", error);
@@ -22,7 +23,8 @@ const HelloWorld = () => {
 
   const handleIncrement = async () => {
     try {
-      await helloWorldContract.increment({ incr: Number(incr) }, { fee: 100 });
+      const incrementTx = await helloWorld.increment({ incr: Number(incr) }, { fee: 100 });
+      await incrementTx.signAndSend();
       console.log(`incremented by ${incr}`);
     } catch (error) {
       console.error("Error calling increment:", error);
@@ -31,7 +33,7 @@ const HelloWorld = () => {
 
   const handleGetMessage = async () => {
     try {
-      const response = await helloWorldContract.getMessage();
+      const response = (await helloWorld.getMessage()).result;
       setMessage(response);
     } catch (error) {
       console.error("Error getting state:", error);
@@ -40,7 +42,7 @@ const HelloWorld = () => {
 
   const handleGetLastIncrement = async () => {
     try {
-      const response = await helloWorldContract.getLastIncrement();
+      const response = (await helloWorld.getLastIncrement()).result;
       setNewIncrement(response.toString());
       console.log(`Last increment: ${response}`);
     } catch (error) {
@@ -50,7 +52,7 @@ const HelloWorld = () => {
 
   const handleGetCount = async () => {
     try {
-      const response = await helloWorldContract.getCount();
+      const response = (await helloWorld.getCount()).result;
       setCount(response.toString());
       console.log(`Count: ${response}`);
     } catch (error) {
@@ -69,7 +71,7 @@ const HelloWorld = () => {
             value={to}
             onChange={(e) => setTo(e.target.value)}
           />
-          <button onClick={handleHello}>Hello</button>
+          <button onClick={handleHello}>Write Message</button>
         </div>
         <br />
         <div>
