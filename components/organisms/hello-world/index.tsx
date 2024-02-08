@@ -66,53 +66,57 @@ const HelloWorld = () => {
   return (
     <div>
       <Card>
-        <h2>Smart Contract Interaction</h2>
-        <div>
-          <label>Recipient:</label>
+      <h2>Call Contract Functions</h2>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Recipient:</label>
           <input
             type="text"
             value={to}
             onChange={(e) => setTo(e.target.value)}
+            className={styles.input}
           />
-          <button onClick={handleHello} >Write Message</button>
+          <button onClick={handleHello} className={styles.button}>Write Message</button>
         </div>
         <br />
-        <div>
-          <label>Increment:</label>
+        <br />
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Increment:</label>
           <input
             type="number"
             value={incr}
             onChange={(e) => setIncr(e.target.value)}
+            className={styles.input}
           />
-          <button onClick={handleIncrement}>Increment</button>
+          <button onClick={handleIncrement} className={styles.button}>Increment</button>
         </div>
       </Card>
 
       {/* Next section here */}
       <div>
         <Card>
-          <button onClick={handleGetMessage}>Get Message</button>
+        <h2>Get Contract State Variables</h2>
+          <button onClick={handleGetMessage} className={styles.button}>Get Message</button>
           <div>
-            <strong>Message:</strong>
+          <strong className={styles.strongText}>Message:</strong>
             <br />
-            <pre>{`${message}`}</pre>
+            <pre className={styles.preFormattedText}>{`${message}`}</pre>
           </div>
           <br />
           {/* Next section here */}
 
           <div>
-            <button onClick={handleGetLastIncrement}>Get Last Increment</button>
+            <button onClick={handleGetLastIncrement} className={styles.button}>Get Last Increment</button>
             <div>
-              <strong>Last Increment:</strong>
-              <pre>{newIncrement}</pre>
+              <strong className={styles.strongText}>Last Increment:</strong>
+              <pre className={styles.preFormattedText}>{newIncrement}</pre>
             </div>
           </div>
           {/* Next section here */}
           <div>
-            <button onClick={handleGetCount}>Get Count</button>
+            <button onClick={handleGetCount} className={styles.button}>Get Count</button>
             <div>
-              <strong>Current Count:</strong>
-              <pre>{count}</pre>
+              <strong className={styles.strongText}>Current Count:</strong>
+              <pre className={styles.preFormattedText}>{count}</pre>
             </div>
           </div>
         </Card>
