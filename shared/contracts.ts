@@ -1,5 +1,5 @@
 import * as HelloWorld from 'hello-world-contract'
-import { Server } from 'soroban-client'
+import { SorobanRpc } from 'stellar-sdk'
 import config from './config.json'
 const { network, rpcUrl } = config
 
@@ -8,4 +8,4 @@ export const helloWorld = new HelloWorld.Contract({
   ...HelloWorld.networks[network as keyof typeof HelloWorld.networks],
 })
 
-export const server = new Server(rpcUrl, { allowHttp: rpcUrl.startsWith('http:') })
+export const server = new SorobanRpc.Server(rpcUrl, { allowHttp: rpcUrl.startsWith('http:') })

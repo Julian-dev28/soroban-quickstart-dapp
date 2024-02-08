@@ -29,7 +29,7 @@ impl HelloContract {
 
         env.storage()
             .instance()
-            .extend_ttl(INSTANCE_BUMP_AMOUNT, INSTANCE_BUMP_AMOUNT);
+            .extend_ttl(INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD);
 
         // Return the message to the caller.
         message
@@ -52,7 +52,7 @@ impl HelloContract {
         env.storage().instance().set(&LAST_INCR, &incr);
         env.storage()
             .instance()
-            .extend_ttl(INSTANCE_BUMP_AMOUNT, INSTANCE_BUMP_AMOUNT);
+            .extend_ttl(INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD);
 
         // Emit an event.
         env.events()

@@ -67,9 +67,13 @@ if !(soroban config identity ls | grep example-user 2>&1 >/dev/null); then
   echo Create the example-user identity
   soroban config identity generate example-user --network $NETWORK
 fi
+
+
 EXAMPLE_USER_ADDRESS="$(soroban config identity address example-user)"
+echo $EXAMPLE_USER_ADDRESS> ./.soroban-example-dapp/address
 
-
+EXAMPLE_USER_SECRET="$(soroban config identity show example-user)"
+echo $EXAMPLE_USER_SECRET > ./.soroban-example-dapp/secret
 
 # This will fail if the account already exists, but it'll still be fine.
 echo Fund example-user account from friendbot
@@ -78,13 +82,15 @@ curl --silent -X POST "$FRIENDBOT_URL?addr=$EXAMPLE_USER_ADDRESS" >/dev/null
 ARGS="--network $NETWORK --source example-user"
 
 echo Build contracts
-make build
+soroban contract build
 
 echo Deploy the hello world contract
+
 HELLO_WORLD_ID="$(
   soroban contract deploy $ARGS \
     --wasm target/wasm32-unknown-unknown/release/soroban_modified_hello_world_contract.wasm
 )"
+
 echo "Contract deployed succesfully with ID: $HELLO_WORLD_ID"
 echo "$HELLO_WORLD_ID" > .soroban/hello_world_id
 
