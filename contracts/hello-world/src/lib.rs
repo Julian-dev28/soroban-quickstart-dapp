@@ -51,11 +51,6 @@ impl HelloContract {
         count
     }
 
-    pub fn extend_ttl(env: Env, threshold: u32, extend_to: u32) {
-        // Extend the TTL of the contract instance.
-        env.storage().instance().extend_ttl(threshold, extend_to);
-    }
-
     pub fn get_last_increment(env: Env) -> u32 {
         // Get the last increment.
         env.storage().instance().get(&LAST_INCR).unwrap_or(0)
@@ -64,6 +59,11 @@ impl HelloContract {
     pub fn get_count(env: Env) -> u32 {
         // Get the current count.
         env.storage().instance().get(&COUNT).unwrap_or(0)
+    }
+
+    pub fn extend_ttl(env: Env, threshold: u32, extend_to: u32) {
+        // Extend the TTL of the contract instance.
+        env.storage().instance().extend_ttl(threshold, extend_to);
     }
 }
 
