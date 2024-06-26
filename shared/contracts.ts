@@ -1,11 +1,8 @@
-import * as HelloWorld from 'hello-world-contract'
-import { SorobanRpc } from 'stellar-sdk'
-import config from './config.json'
-const { network, rpcUrl } = config
+import * as HelloWorld from "hello-world-contract";
 
-export const helloWorld = new HelloWorld.Contract({
-  rpcUrl,
-  ...HelloWorld.networks[network as keyof typeof HelloWorld.networks],
+export const helloWorld = new HelloWorld.Client({
+  ...HelloWorld.networks.testnet,
+  rpcUrl: 'https://soroban-testnet.stellar.org',
+  allowHttp: true,
+
 })
-
-export const server = new SorobanRpc.Server(rpcUrl, { allowHttp: rpcUrl.startsWith('http:') })

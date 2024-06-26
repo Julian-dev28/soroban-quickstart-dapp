@@ -51,7 +51,7 @@ testnet)
 esac
 
 echo Add the $NETWORK network to cli client
-soroban config network add \
+soroban network add \
   --rpc-url "$SOROBAN_RPC_URL" \
   --network-passphrase "$SOROBAN_NETWORK_PASSPHRASE" "$NETWORK"
 
@@ -63,16 +63,16 @@ echo $SOROBAN_RPC_URL > ./.soroban-example-dapp/rpc-url
 echo "$SOROBAN_NETWORK_PASSPHRASE" > ./.soroban-example-dapp/passphrase
 echo "{ \"network\": \"$NETWORK\", \"rpcUrl\": \"$SOROBAN_RPC_URL\", \"networkPassphrase\": \"$SOROBAN_NETWORK_PASSPHRASE\" }" > ./shared/config.json
 
-if !(soroban config identity ls | grep example-user 2>&1 >/dev/null); then
+if !(soroban keys ls | grep example-user 2>&1 >/dev/null); then
   echo Create the example-user identity
-  soroban config identity generate example-user --network $NETWORK
+  soroban keys generate example-user --network $NETWORK
 fi
 
 
-EXAMPLE_USER_ADDRESS="$(soroban config identity address example-user)"
+EXAMPLE_USER_ADDRESS="$(soroban keys address example-user)"
 echo $EXAMPLE_USER_ADDRESS> ./.soroban-example-dapp/address
 
-EXAMPLE_USER_SECRET="$(soroban config identity show example-user)"
+EXAMPLE_USER_SECRET="$(soroban keys show example-user)"
 echo $EXAMPLE_USER_SECRET > ./.soroban-example-dapp/secret
 
 # This will fail if the account already exists, but it'll still be fine.
