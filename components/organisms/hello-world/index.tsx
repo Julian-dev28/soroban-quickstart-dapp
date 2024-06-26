@@ -17,11 +17,11 @@ const HelloWorld = () => {
     try {
       const helloTx = await helloWorld.hello(
         { to },
-        { fee: 100, timeoutInSeconds: 60 }
+        { fee: 100 }
       );
       let txXDR = xdr.ScString.toXDR(helloTx)
       
-      await signTransaction(txXDR.toString(), { network: "testnet" });
+      await signTransaction(txXDR.toString());
       console.log(`hello, ${to}`);
     } catch (error) {
       console.error("Error calling hello:", error);

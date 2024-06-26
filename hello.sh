@@ -1,4 +1,4 @@
-EXAMPLE_USER_SECRET="$(soroban config identity show example-user)"
+EXAMPLE_USER_SECRET="$(soroban keys show example-user)"
 CONTRACT_ID="$(cat ./.soroban/hello_world_id)"
 
 soroban contract invoke \
