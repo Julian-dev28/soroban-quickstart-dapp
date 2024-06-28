@@ -60,31 +60,26 @@ const HelloWorld = () => {
 
   const handleHello = async () => {
     try {
-      const helloTx = await helloWorld.hello(
-        { to },
-        { fee: 100 }
-      );
-      const txXDR = helloTx.built?.toXDR?.() ?? 100;
-
-      const RPCServer = new SorobanRpc.Server(
-        "https://soroban-testnet.stellar.org",
-        { allowHttp: true }
-      );
-      const myContract = new HelloContract(contractId);
-      await myContract.init(contractId);
-      const operation = myContract.hello(to);
-      console.log(operation);
-      const sourceAccount = await RPCServer.getAccount(await getPublicKey());
-      const tx = new TransactionBuilder(sourceAccount, {
-        fee: BASE_FEE,
-        networkPassphrase: Networks.TESTNET,
-      })
-        .addOperation(operation)
-        .setTimeout(30)
-        .build();
-      console.log(tx);
-
-      await signTransaction(txXDR.toString());
+      // const RPCServer = new SorobanRpc.Server(
+      //   "https://soroban-testnet.stellar.org",
+      //   { allowHttp: true }
+      // );
+      // const myContract = new HelloContract(contractId);
+      // await myContract.init(contractId);
+      // const operation = myContract.hello(to);
+      // console.log(operation);
+      // const sourceAccount = await RPCServer.getAccount(await getPublicKey());
+      // const tx = new TransactionBuilder(sourceAccount, {
+      //   fee: BASE_FEE,
+      //   networkPassphrase: Networks.TESTNET,
+      // })
+      //   .addOperation(operation)
+      //   .setTimeout(30)
+      //   .build();
+      // console.log(tx);
+      const helloTx = await helloWorld.hello({ to }, { fee: 100 });
+      const txXDR = helloTx.built?.toXDR?.() ?? "404";
+      await signTransaction(txXDR.toString(), {network: "testnet" , networkPassphrase: Networks.TESTNET});
     } catch (error) {
       console.error("Error calling hello:", error);
     }
@@ -96,7 +91,8 @@ const HelloWorld = () => {
         { incr: Number(incr) },
         { fee: 100 }
       );
-      await incrementTx.signAndSend();
+      const txXDR = incrementTx.built?.toXDR?.() ?? "404";
+      await signTransaction(txXDR.toString(), {network: "testnet" , networkPassphrase: Networks.TESTNET});
       console.log(`incremented by ${incr}`);
       setIncrementSuccess(true); // Set success state to true on successful increment
     } catch (error) {
@@ -109,6 +105,7 @@ const HelloWorld = () => {
     try {
       const response = (await helloWorld.get_message()).result;
       setMessage(response);
+      console.log(`Message: ${response}`);
     } catch (error) {
       console.error("Error getting state:", error);
     }
