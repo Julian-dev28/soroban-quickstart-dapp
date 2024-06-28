@@ -54,18 +54,19 @@ const HelloWorld = () => {
   const [count, setCount] = useState("");
   const [incr, setIncr] = useState("");
   const [newIncrement, setNewIncrement] = useState("");
-  const [message, setMessage] = useState([""]);
+  const [message, setMessage] = useState("");
   const [incrementSuccess, setIncrementSuccess] = useState(false); // New state for tracking increment success
   const contractId = HelloWorldContract.networks.testnet.contractId;
 
   const handleHello = async () => {
     try {
-      // const RPCServer = new SorobanRpc.Server(
-      //   "https://soroban-testnet.stellar.org",
-      //   { allowHttp: true }
-      // );
-      // const myContract = new HelloContract(contractId);
-      // await myContract.init(contractId);
+      const RPCServer = new SorobanRpc.Server(
+        "https://soroban-testnet.stellar.org",
+        { allowHttp: true }
+      );
+      const myContract = new HelloContract(contractId);
+      await myContract.init(contractId);
+
       // const operation = myContract.hello(to);
       // console.log(operation);
       // const sourceAccount = await RPCServer.getAccount(await getPublicKey());
@@ -77,9 +78,14 @@ const HelloWorld = () => {
       //   .setTimeout(30)
       //   .build();
       // console.log(tx);
+
       const helloTx = await helloWorld.hello({ to }, { fee: 100 });
       const txXDR = helloTx.built?.toXDR?.() ?? "404";
-      await signTransaction(txXDR.toString(), {network: "testnet" , networkPassphrase: Networks.TESTNET});
+      await signTransaction(txXDR.toString(), {
+        network: "testnet",
+        networkPassphrase: Networks.TESTNET,
+      });
+      console.log(`Hello ${to}`);
     } catch (error) {
       console.error("Error calling hello:", error);
     }
@@ -92,7 +98,10 @@ const HelloWorld = () => {
         { fee: 100 }
       );
       const txXDR = incrementTx.built?.toXDR?.() ?? "404";
-      await signTransaction(txXDR.toString(), {network: "testnet" , networkPassphrase: Networks.TESTNET});
+      await signTransaction(txXDR.toString(), {
+        network: "testnet",
+        networkPassphrase: Networks.TESTNET,
+      });
       console.log(`incremented by ${incr}`);
       setIncrementSuccess(true); // Set success state to true on successful increment
     } catch (error) {
@@ -104,7 +113,7 @@ const HelloWorld = () => {
   const handleGetMessage = async () => {
     try {
       const response = (await helloWorld.get_message()).result;
-      setMessage(response);
+      setMessage(response.toString());
       console.log(`Message: ${response}`);
     } catch (error) {
       console.error("Error getting state:", error);
