@@ -1,52 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "../../atoms";
-import * as HelloWorldContract from "hello-world-contract";
 import { helloWorld } from "../../../shared/contracts";
 import styles from "./style.module.css";
+import { SorobanRpc, TransactionBuilder, xdr, TimeoutInfinite } from '@stellar/stellar-sdk';
+import { Client, Spec, ClientOptions, AssembledTransaction, } from '@stellar/stellar-sdk/contract';
 import { getPublicKey, signTransaction } from "@stellar/freighter-api";
-import { Client, Spec, ClientOptions } from "@stellar/stellar-sdk/contract";
-import {
-  Contract,
-  SorobanRpc,
-  Networks,
-  xdr,
-  BASE_FEE,
-  TransactionBuilder,
-} from "@stellar/stellar-sdk";
+import { Server } from "@stellar/stellar-sdk/rpc";
 
-export class HelloContract extends Contract {
-  rpc: SorobanRpc.Server;
-  spec!: Spec;
-
-  constructor(address: string) {
-    super(address);
-    this.rpc = new SorobanRpc.Server("https://soroban-testnet.stellar.org", {
-      allowHttp: true,
-    });
-  }
-
-  public async init(address: string) {
-    this.spec = await this.getSpecFromContract(address);
-  }
-
-  public hello(to: string): xdr.Operation {
-    const invokeArgs = this.spec.funcArgsToScVals("hello", { to });
-    const operation = this.call("hello", ...invokeArgs);
-    return operation;
-  }
-
-  public async getSpecFromContract(contractId: string): Promise<Spec> {
+// Helper function to get spec from contract
+async function getSpecFromContract(contractId: string): Promise<Spec> {
     const clientOptions: ClientOptions = {
-      contractId: "CC4KCNLZBUNSNAWRRBNDJXQRRPJ64776OUFJLMEQ5DPFG5TUSF5PSGZ2",
-      networkPassphrase: Networks.TESTNET,
-      rpcUrl: "https://soroban-testnet.stellar.org",
+        contractId: contractId,
+        networkPassphrase: 'Test SDF Network ; September 2015',
+        rpcUrl: 'https://soroban-testnet.stellar.org',
     };
-    const wasmByteCode = await this.rpc.getContractWasmByContractId(contractId);
-    const spec = await (
-      await Client.fromWasm(wasmByteCode, clientOptions)
-    ).spec;
+    const rpc = new Server(clientOptions.rpcUrl);
+    const wasmByteCode = await rpc.getContractWasmByContractId(contractId);
+    const spec = (await Client.fromWasm(wasmByteCode, clientOptions)).spec;
     return spec;
-  }
+}
+
+export class HelloContract extends Client {
+    static spec: any;
+
+    private constructor(spec: any, clientOptions: ClientOptions) {
+        super(spec, clientOptions);
+    }
+
+    static async create(contractId: string): Promise<HelloContract> {
+        const spec = await getSpecFromContract(contractId);
+        const clientOptions: ClientOptions = {
+            contractId: contractId,
+            networkPassphrase: 'Test SDF Network ; September 2015',
+            rpcUrl: 'https://soroban-testnet.stellar.org',
+        };
+        HelloContract.spec = spec; // Set the spec to the static property
+        return new HelloContract(spec, clientOptions);
+    }
+
+    async hello(to: string): Promise<string> {
+        return HelloContract.spec.getFunc('hello').toXDR({ to });
+    }
+
+    async increment(incr: number): Promise<string> {
+        return HelloContract.spec.getFunc('increment').toXDR({ incr });
+    }
+
+    async get_message(): Promise<string> {
+        return HelloContract.spec.getFunc('get_message').toXDR();
+    }
+
+    async get_last_increment(): Promise<string> {
+        return HelloContract.spec.getFunc('get_last_increment').toXDR();
+    }
+
+    async get_count(): Promise<string> {
+        return HelloContract.spec.getFunc('get_count').toXDR();
+    }
 }
 
 const HelloWorld = () => {
@@ -54,37 +64,37 @@ const HelloWorld = () => {
   const [count, setCount] = useState("");
   const [incr, setIncr] = useState("");
   const [newIncrement, setNewIncrement] = useState("");
-  const [message, setMessage] = useState([""]);
+  const [message, setMessage] = useState("");
   const [incrementSuccess, setIncrementSuccess] = useState(false); // New state for tracking increment success
-  const contractId = HelloWorldContract.networks.testnet.contractId;
+  const [helloTx, setHelloTx] = useState<AssembledTransaction<string[]> | undefined>(undefined); // State to hold hello transaction
+
+  useEffect(() => { 
+    const createHelloTx = async () => {
+      try {
+        let result = await helloWorld.hello({ to: to.toString() });
+        const contractId = 'CC4KCNLZBUNSNAWRRBNDJXQRRPJ64776OUFJLMEQ5DPFG5TUSF5PSGZ2';
+        const helloContract = await HelloContract.create(contractId);
+        const tx = await helloContract.hello(to);
+        setHelloTx(result);
+      } catch (error) {
+        console.error("Error creating hello transaction:", error);
+      }
+    };
+
+    if (to) {
+      createHelloTx();
+    }
+  }, [to]);
 
   const handleHello = async () => {
     try {
-      const helloTx = await helloWorld.hello(
-        { to },
-        { fee: 100 }
-      );
-      const txXDR = helloTx.built?.toXDR?.() ?? 100;
-
-      const RPCServer = new SorobanRpc.Server(
-        "https://soroban-testnet.stellar.org",
-        { allowHttp: true }
-      );
-      const myContract = new HelloContract(contractId);
-      await myContract.init(contractId);
-      const operation = myContract.hello(to);
-      console.log(operation);
-      const sourceAccount = await RPCServer.getAccount(await getPublicKey());
-      const tx = new TransactionBuilder(sourceAccount, {
-        fee: BASE_FEE,
-        networkPassphrase: Networks.TESTNET,
-      })
-        .addOperation(operation)
-        .setTimeout(30)
-        .build();
-      console.log(tx);
-
-      await signTransaction(txXDR.toString());
+      if (helloTx && helloTx.built) {
+        const txXdr = helloTx.built.toXDR();
+        await signTransaction(txXdr);
+        console.log(`hello, ${to}`);
+      } else {
+        console.error("Transaction is not ready.");
+      }
     } catch (error) {
       console.error("Error calling hello:", error);
     }
@@ -108,7 +118,7 @@ const HelloWorld = () => {
   const handleGetMessage = async () => {
     try {
       const response = (await helloWorld.get_message()).result;
-      setMessage(response);
+      setMessage(response.toString());
     } catch (error) {
       console.error("Error getting state:", error);
     }
@@ -166,7 +176,6 @@ const HelloWorld = () => {
         </div>
       </Card>
 
-      {/* Next section here */}
       <div>
         <Card>
           <h2>Get Contract State Variables</h2>
@@ -179,8 +188,6 @@ const HelloWorld = () => {
             <pre className={styles.preFormattedText}>{`${message}`}</pre>
           </div>
           <br />
-          {/* Next section here */}
-
           <div>
             <button onClick={handleGetLastIncrement} className={styles.button}>
               Get Last Increment
@@ -190,7 +197,6 @@ const HelloWorld = () => {
               <pre className={styles.preFormattedText}>{newIncrement}</pre>
             </div>
           </div>
-          {/* Next section here */}
           <div>
             <button onClick={handleGetCount} className={styles.button}>
               Get Count
